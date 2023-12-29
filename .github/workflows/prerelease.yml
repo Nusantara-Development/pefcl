@@ -18,11 +18,11 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.ref }}
 
-      - name: Setup Node and Yarn Cache
+      - name: Setup Node and pnpm Cache
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Get variables
         id: get_vars
@@ -32,27 +32,27 @@ jobs:
           echo "::set-output name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
 
       - name: Install main deps
-        run: yarn --frozen-lockfile
+        run: pnpm --frozen-lockfile
 
       - name: Translations
         env:
           LOCALAZY_READ_KEY: a8269809765126758267-f01743c76d6e9e434d7b4c6322938eefce8d82a559b57efc2acfcf4531d46089
         run: |
-          yarn translations:pull
-          yarn translations:generate-index
+          pnpm translations:pull
+          pnpm translations:generate-index
 
       - name: Install src deps
         working-directory: src
-        run: yarn --frozen-lockfile
+        run: pnpm --frozen-lockfile
 
       - name: Install web deps
         working-directory: web
-        run: yarn --frozen-lockfile
+        run: pnpm --frozen-lockfile
 
       - name: Create pre-release
         run: |
           chmod +x "./scripts/prerelease.sh"
-          yarn pre-release
+          pnpm pre-release
 
       - name: Create Release & Changelog
         uses: 'marvinpinto/action-automatic-releases@v1.2.1'
