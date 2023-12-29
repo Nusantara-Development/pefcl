@@ -2,12 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { HashRouter } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import image from './bg.png';
-import { NuiProvider } from 'react-fivem-hooks';
-import MobileApp from './views/Mobile/Mobile';
+import { NuiProvider } from 'fivem-nui-react-lib';
+import { MobileApp } from './views/Mobile/Mobile';
 import i18n from '@utils/i18n';
-import { IPhoneSettings } from '@project-error/npwd-types';
+import {
+  IPhoneSettings, // @ts-ignore
+} from '@project-error/npwd-types';
 
 const Container = styled.div`
   position: relative;
@@ -62,7 +64,7 @@ const mockedSettings: IPhoneSettings = {
 
 const Root = () => (
   <HashRouter>
-    <NuiProvider>
+    <NuiProvider resource="pefcl">
       <Container>
         <Background src={image} />
         <React.Suspense fallback="Loading phone">
@@ -75,4 +77,5 @@ const Root = () => (
   </HashRouter>
 );
 
+// eslint-disable-next-line react/no-deprecated
 ReactDOM.render(<Root />, document.getElementById('mobile-app'));

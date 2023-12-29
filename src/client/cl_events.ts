@@ -44,47 +44,54 @@ const waitForNUILoaded = (checkInterval = 250): Promise<void> => {
   });
 };
 
-const SendBankUIMessage = (data: object) => {
+type SendBankUIMessage = {
+  app: string;
+  method: string;
+  data?: unknown;
+};
+const SendBankUIMessage = (data: SendBankUIMessage) => {
   SendNUIMessage(data);
 
   if (GetResourceState('npwd') === 'started') {
-    npwdExports.sendUIMessage(data);
+    //idk how it works in npwd but why not just remapping a value here?
+    const payload = { type: data.method, payload: data.data };
+    npwdExports.sendUIMessage(payload);
   }
 };
 
 onNet(Broadcasts.NewAccount, (payload: Account) => {
-  SendBankUIMessage({ type: Broadcasts.NewAccount, payload });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.NewAccount, data: payload });
 });
 
 onNet(Broadcasts.NewAccountBalance, (balance: number) => {
-  SendBankUIMessage({ type: Broadcasts.NewAccountBalance, payload: balance });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.NewAccountBalance, data: balance });
 });
 
 onNet(Broadcasts.NewTransaction, (payload: Transaction) => {
-  SendBankUIMessage({ type: Broadcasts.NewTransaction, payload });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.NewTransaction, data: payload });
 });
 
 onNet(Broadcasts.UpdatedAccount, (payload: Account) => {
-  SendBankUIMessage({ type: Broadcasts.UpdatedAccount, payload });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.UpdatedAccount, data: payload });
 });
 
 onNet(Broadcasts.NewInvoice, (payload: Invoice) => {
-  SendBankUIMessage({ type: Broadcasts.NewInvoice, payload });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.NewInvoice, data: payload });
 });
 
 onNet(Broadcasts.NewSharedUser, () => {
-  SendBankUIMessage({ type: Broadcasts.NewSharedUser });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.NewSharedUser });
 });
 
 onNet(Broadcasts.RemovedSharedUser, () => {
-  SendBankUIMessage({ type: Broadcasts.RemovedSharedUser });
+  SendBankUIMessage({ app: 'BROADCAST', method: Broadcasts.RemovedSharedUser });
 });
 
 onNet(UserEvents.Loaded, async () => {
   console.debug('Waiting for NUI to load ..');
   await waitForNUILoaded();
   console.debug('Loaded. Emitting data to NUI.');
-  SendBankUIMessage({ type: UserEvents.Loaded, payload: true });
+  SendBankUIMessage({ app: 'USER', method: UserEvents.Loaded, data: true });
 
   if (!useFrameworkIntegration) {
     StatSetInt(CASH_BAL_STAT, (await API.getMyCash()) ?? 0, true);
@@ -92,7 +99,7 @@ onNet(UserEvents.Loaded, async () => {
 });
 
 onNet(UserEvents.Unloaded, () => {
-  SendBankUIMessage({ type: UserEvents.Unloaded });
+  SendBankUIMessage({ app: 'USER', method: UserEvents.Unloaded });
 });
 
 const CASH_BAL_STAT = GetHashKey('MP0_WALLET_BALANCE');
@@ -130,7 +137,7 @@ RegisterCommand(
     console.debug('Waiting for NUI to load ..');
     await waitForNUILoaded();
     console.debug('Loaded. Emitting data to NUI.');
-    SendBankUIMessage({ type: UserEvents.Loaded, payload: true });
+    SendBankUIMessage({ app: 'USER', method: UserEvents.Loaded, data: true });
   },
   false,
 );

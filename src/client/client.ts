@@ -18,7 +18,7 @@ export const setBankIsOpen = (bool: boolean) => {
   }
 
   isBankOpen = bool;
-  SendNUIMessage({ type: 'setVisible', payload: bool });
+  SendNUIMessage({ app: 'BANK', method: 'setVisible', data: bool });
   SetNuiFocus(bool, bool);
 };
 
@@ -28,7 +28,7 @@ export const setAtmIsOpen = (bool: boolean) => {
   }
 
   isAtmOpen = bool;
-  SendNUIMessage({ type: 'setVisibleATM', payload: bool });
+  SendNUIMessage({ app: 'ATM', method: 'setVisibleATM', data: bool });
   SetNuiFocus(bool, bool);
 };
 
@@ -63,7 +63,7 @@ if (!useFrameworkIntegration) {
       if (!config.atms?.props?.includes(model)) return console.log('not atm');
 
       isAtmOpen = !isAtmOpen;
-      SendNUIMessage({ type: 'setVisibleATM', payload: isAtmOpen });
+      SendNUIMessage({ app: 'ATM', method: 'setVisibleATM', data: isAtmOpen });
 
       if (isAtmOpen) {
         SetNuiFocus(true, true);

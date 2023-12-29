@@ -20,21 +20,28 @@ export const useI18n = (initialI18n: i18n, language: Language) => {
 
       /* Change language for i18n */
       i18n.changeLanguage(language);
-
       /* Import locale for DayJS, then update translations & set locale */
-      import(`dayjs/locale/${language}.js`).then(() => {
-        dayjs.locale(language);
-        dayjs.updateLocale(language, {
-          calendar: {
-            lastDay: i18n.t('calendar.lastDay'),
-            sameDay: i18n.t('calendar.sameDay'),
-            nextDay: i18n.t('calendar.nextDay'),
-            lastWeek: i18n.t('calendar.lastWeek'),
-            nextWeek: i18n.t('calendar.nextWeek'),
-            sameElse: i18n.t('calendar.sameElse'),
-          },
-        });
-      });
+      import('dayjs');
+      const modules = import.meta.glob('./dayjs/locale/*.js', { import: 'default' });
+      if (modules[`./dayjs/locale/${language}`]) {
+        modules[`./dayjs/locale/${language}`]()
+          .then(() => {
+            dayjs.locale(language);
+            dayjs.updateLocale(language, {
+              calendar: {
+                lastDay: i18n.t('calendar.lastDay'),
+                sameDay: i18n.t('calendar.sameDay'),
+                nextDay: i18n.t('calendar.nextDay'),
+                lastWeek: i18n.t('calendar.lastWeek'),
+                nextWeek: i18n.t('calendar.nextWeek'),
+                sameElse: i18n.t('calendar.sameElse'),
+              },
+            });
+          })
+          .catch(() => console.error('Failed to import Days js locale'));
+      } else {
+        console.error('Day js module not found');
+      }
     },
     [i18n],
   );

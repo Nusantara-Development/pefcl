@@ -1,6 +1,6 @@
 import React from 'react';
 import './mobile.module.css';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import theme from '@utils/theme';
 import MobileFooter, { FooterHeight } from './Components/MobileFooter';
 import MobileRoutes from './Routes';
@@ -9,19 +9,22 @@ import { i18n } from 'i18next';
 import './i18n';
 import { I18nextProvider } from 'react-i18next';
 import { useI18n } from '@hooks/useI18n';
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 import { Heading6 } from '@components/ui/Typography/Headings';
 import { GlobalSettingsProvider } from '@hooks/useGlobalSettings';
-import { IPhoneSettings } from '@project-error/npwd-types';
+import {
+  IPhoneSettings, //@ts-ignore
+} from '@project-error/npwd-types';
 import { BroadcastsWrapper } from '@hooks/useBroadcasts';
 import { MemoryRouter } from 'react-router-dom';
+import { NuiProvider } from 'fivem-nui-react-lib';
 
 const Container = styled.div`
   color: #fff;
   background: ${theme.palette.background.default};
   overflow: auto;
   height: 100%;
-  padding-bottom: ${FooterHeight};
+  padding-bottom: 5rem;
 `;
 
 interface LoadingFallbackProps {
@@ -50,7 +53,7 @@ interface MobileAppProps {
   settings: IPhoneSettings;
 }
 
-const MobileApp = (props: MobileAppProps) => {
+export const MobileApp = (props: MobileAppProps) => {
   const lng = props.settings.language.value;
   const { i18n } = useI18n(props.i18n, lng);
 
@@ -86,5 +89,10 @@ const MobileApp = (props: MobileAppProps) => {
     </GlobalSettingsProvider>
   );
 };
-
-export default MobileApp;
+export default function WithProvider(props: MobileAppProps) {
+  return (
+    <NuiProvider resource="pefcl">
+      <MobileApp {...props} />
+    </NuiProvider>
+  );
+}

@@ -5,60 +5,39 @@ import { Account } from '@typings/Account';
 import { Broadcasts } from '@typings/Events';
 import { updateAccount } from '@utils/account';
 import { useAtom, useSetAtom } from 'jotai';
-import { useNuiEvent } from 'react-fivem-hooks';
+import { useNuiEvent } from 'fivem-nui-react-lib';
 
 export const useBroadcasts = () => {
   const updateInvoices = useSetAtom(invoicesAtom);
   const updateTransactions = useSetAtom(transactionBaseAtom);
   const [accounts, updateAccounts] = useAtom(accountsAtom);
 
-  useNuiEvent({
-    event: Broadcasts.NewTransaction,
-    callback: () => {
-      updateTransactions();
-    },
+  useNuiEvent('BROADCAST', Broadcasts.NewTransaction, () => {
+    updateTransactions();
   });
 
-  useNuiEvent({
-    event: Broadcasts.NewAccount,
-    callback: (account: Account) => {
-      updateAccounts([...accounts, account]);
-    },
+  useNuiEvent('BROADCAST', Broadcasts.NewAccount, (account: Account) => {
+    updateAccounts([...accounts, account]);
   });
 
-  useNuiEvent({
-    event: Broadcasts.UpdatedAccount,
-    callback: () => {
-      updateAccounts();
-    },
+  useNuiEvent('BROADCAST', Broadcasts.UpdatedAccount, () => {
+    updateAccounts();
   });
 
-  useNuiEvent({
-    event: Broadcasts.NewAccountBalance,
-    callback: (account: Account) => {
-      updateAccounts(updateAccount(accounts, account));
-    },
+  useNuiEvent('BROADCAST', Broadcasts.NewAccountBalance, (account: Account) => {
+    updateAccounts(updateAccount(accounts, account));
   });
 
-  useNuiEvent({
-    event: Broadcasts.NewInvoice,
-    callback: () => {
-      updateInvoices();
-    },
+  useNuiEvent('BROADCAST', Broadcasts.NewInvoice, () => {
+    updateInvoices();
   });
 
-  useNuiEvent({
-    event: Broadcasts.NewSharedUser,
-    callback: () => {
-      updateAccounts();
-    },
+  useNuiEvent('BROADCAST', Broadcasts.NewSharedUser, () => {
+    updateAccounts();
   });
 
-  useNuiEvent({
-    event: Broadcasts.RemovedSharedUser,
-    callback: () => {
-      updateAccounts();
-    },
+  useNuiEvent('BROADCAST', Broadcasts.RemovedSharedUser, () => {
+    updateAccounts();
   });
 };
 

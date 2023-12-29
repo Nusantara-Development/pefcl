@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { CircularProgress } from '@mui/material';
-import { Box } from '@mui/system';
+import { CircularProgress, Box } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Sidebar from './Sidebar';
