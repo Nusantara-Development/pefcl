@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ListSubheader, MenuItem, SelectChangeEvent, Stack, Typography } from '@mui/material';
+import { ListSubheader, MenuItem, SelectChangeEvent, Stack, Typography, Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Account, AccountRole, AccountType, ExternalAccount } from '@typings/Account';
@@ -11,7 +11,6 @@ import { BodyText } from './ui/Typography/BodyText';
 import { Heading6 } from './ui/Typography/Headings';
 import Select from './ui/Select';
 import Button from './ui/Button';
-import { Box } from '@mui/system';
 import AddExternalAccountModal from './Modals/AddExternalAccount';
 
 const BalanceText = styled(Heading6)`

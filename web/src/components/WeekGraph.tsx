@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 import { useConfig } from '@hooks/useConfig';
-import { Divider, Popover, Stack } from '@mui/material';
+import { Divider, Popover, Stack, Box } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { Box } from '@mui/system';
 import { GetTransactionHistoryResponse } from '@typings/Transaction';
 import { formatMoney } from '@utils/currency';
 import theme from '@utils/theme';

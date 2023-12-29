@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Divider } from '@mui/material';
-import { fontWeight } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useConfig } from '../hooks/useConfig';
@@ -16,7 +15,7 @@ const Row = styled.li`
 
 const Label = styled(BodyText)``;
 const Amount = styled(BodyText)`
-  ${fontWeight}
+  font-weight: 600; //maybe breaking changes for fontweight
 `;
 
 interface SummaryRowProps {

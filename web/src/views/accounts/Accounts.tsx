@@ -1,7 +1,6 @@
 import TextField from '@components/ui/Fields/TextField';
 import styled from '@emotion/styled';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
-import { Box } from '@mui/system';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Stack, Box } from '@mui/material';
 import copy from 'copy-to-clipboard';
 import { AccountType } from '@typings/Account';
 import { AccountEvents } from '@typings/Events';
